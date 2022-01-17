@@ -1,14 +1,20 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeChangeException;
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.models.requests.UpdatePlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.UpdatePlaylistResult;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 /**
  * Implementation of the UpdatePlaylistActivity for the MusicPlaylistService's UpdatePlaylist API.
@@ -49,6 +55,17 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
     @Override
     public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
         log.info("Received UpdatePlaylistRequest {}", updatePlaylistRequest);
+
+        try {
+            Playlist playlist = playlistDao.getPlaylist(updatePlaylistRequest.getId());
+
+            if (!Objects.equals(playlist.getCustomerId(), updatePlaylistRequest.getCustomerId())) {
+                throw new InvalidAttributeChangeException("Cannot change customer ID");
+            }
+
+        } catch (InvalidAttributeChangeException e) {
+            log.error("InvalidAttributeChangeException: {}", e.getMessage());
+        }
 
         return UpdatePlaylistResult.builder()
                 .withPlaylist(new PlaylistModel())
