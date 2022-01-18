@@ -1,1 +1,141 @@
-PARTICIPANTS: use this file for creating the class diagram in mastery task 01
+@startuml
+class UpdatePlaylistActivity {
+    +handleRequest(UpdatePlaylistRequest): UpdatePlaylistResult
+}
+class CreatePlaylistActivity {
+    +handleRequest(CreatePlaylistRequest) : CreatePlaylistResult
+}
+class GetPlaylistActivity {
+    +handleRequest(GetPlaylistRequest) : GetPlaylistResult
+}
+class GetPlaylistSongsActivity {
+    +handleRequest(GetPlaylistSongsRequest) : GetPlaylistSongsResult
+}
+class AddSongToPlaylistActivity {
+    +handleRequest(AddSongToPlaylistRequest) : AddSongToPlaylistResult
+}
+
+class UpdatePlaylistActivity implements RequestHandler
+class CreatePlaylistActivity implements RequestHandler
+class GetPlaylistActivity implements RequestHandler
+class GetPlaylistSongsActivity implements RequestHandler
+class AddSongToPlaylistActivity implements RequestHandler
+
+
+class UpdatePlaylistRequest {}
+class CreatePlaylistRequest {}
+class GetPlaylistRequest {}
+class GetPlaylistSongsRequest {}
+class AddSongToPlaylistRequest {}
+
+class UpdatePlaylistResult {}
+class CreatePlaylistResult {}
+class GetPlaylistResult {}
+class AddSongToPlaylistResult {}
+class GetPlaylistSongsResult {
+  -List<SongModel> songList;
+}
+
+interface RequestHandler {
+  +handleRequest()
+}
+class SongModel {}
+class PlaylistNotFoundException {}
+
+class AlbumTrack {
+  -@DynamoDBHashKey asin : String
+  -@DynamoDBRangeKey trackNumber : Integer
+  -albumName : String
+  -songTitle : String
+}
+class AlbumTrackDao {
+  -@DynamoDBHashKey dynamoDbMapper : DynamoDBMapper
+}
+
+class Playlist {
+  -@DynamoDBHashKey id : String
+  -name : String
+  -customerId : String
+  -songCount : Integer
+  -tags : Set<String>
+  -songList : List<AlbumTrack>
+}
+class PlaylistDao {
+    -dynamoDbMapper : DynamoDBMapper
+    +getPlaylist(String id) : Playlist
+}
+
+class AlbumTrackNotFoundException
+class InvalidAttributeValueException
+class InvalidAttributeChangeException
+
+PlaylistNotFoundException <|-- InvalidAttributeChangeException
+PlaylistNotFoundException <|-- InvalidAttributeValueException
+
+Playlist *-- AlbumTrack
+
+AddSongToPlaylistResult <|.. SongModel
+GetPlaylistSongsResult <|.. SongModel
+
+UpdatePlaylistResult *-- PlaylistModel
+CreatePlaylistResult *-- PlaylistModel
+GetPlaylistResult *-- PlaylistModel
+GetPlaylistSongsResult *-- PlaylistModel
+
+GetPlaylistRequest  <|- SongOrder
+
+
+UpdatePlaylistActivity *-- PlaylistDao
+CreatePlaylistActivity *-- PlaylistDao
+GetPlaylistActivity *-- PlaylistDao
+GetPlaylistSongsActivity *-- PlaylistDao
+AddSongToPlaylistActivity *-- PlaylistDao
+AddSongToPlaylistActivity *-- AlbumTrackDao
+
+UpdatePlaylistActivity *- UpdatePlaylistRequest
+CreatePlaylistActivity *- CreatePlaylistRequest
+GetPlaylistActivity *- GetPlaylistRequest
+GetPlaylistSongsActivity *- GetPlaylistSongsRequest
+AddSongToPlaylistActivity *- AddSongToPlaylistRequest
+
+
+PlaylistDao <- PlaylistNotFoundException
+PlaylistDao <. Playlist
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
