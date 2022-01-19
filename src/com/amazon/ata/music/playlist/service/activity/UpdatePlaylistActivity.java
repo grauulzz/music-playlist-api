@@ -65,18 +65,21 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
         String requestedId = updatePlaylistRequest.getId();
         String requestedName = updatePlaylistRequest.getName();
         String requestedCustomerId = updatePlaylistRequest.getCustomerId();
-        Playlist playlist = playlistDao.getPlaylist(requestedId);   // mapper loads playlist from dao
-        try {
+        Playlist playlist = playlistDao.getPlaylist(requestedId);   // mapper.load is executed during get request
+        boolean validated = isValidString(requestedName)
+                && isValidString(requestedCustomerId);
 
-            boolean validated = isValidString(requestedName)
-                    && isValidString(requestedCustomerId);
+        try {
+            playlistDao.savePlaylist(playlist);
 
             if (!validated) {
                 throw new InvalidAttributeValueException("Invalid characters entry in playlist name or customer ID");
             }
 
             if (Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
-                playlistDao.savePlaylist(playlist);
+                playlist.setCustomerId(requestedCustomerId);
+                playlist.setName(requestedName);
+
             }
                 else {
                     throw new InvalidAttributeChangeException("Cannot change customer ID");
@@ -87,14 +90,13 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
             throw e;
         }
 
-        playlist.setCustomerId(requestedCustomerId);
-        playlist.setName(requestedName);
-        PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
+
 
         return UpdatePlaylistResult
                 .builder()
-                .withPlaylist(playlistModel)
-                .build();
+                .withPlaylist(new ModelConverter()
+                        .toPlaylistModel(playlist))
+                        .build();
 
     }
 

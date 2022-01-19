@@ -35,27 +35,17 @@ public class PlaylistDao {
      * @return the stored Playlist, or null if none was found.
      */
     public Playlist getPlaylist(String id) {
-        Playlist playlist = this.dynamoDbMapper.load(Playlist.class, id);
-
-        if (playlist == null || isValidString(playlist.getId())) {
-            throw new PlaylistNotFoundException("Could not find playlist with id " + id);
-        }
-
-        return playlist;
+        return dynamoDbMapper.load(Playlist.class, id);
     }
 
     /**
-     * Returns the specified {@link Playlist}.
+     * Returns the saved {@link Playlist}.
      *
-     * @param playlist the Playlist to store
+     * @param playlist the Playlist to save
      */
     public Playlist savePlaylist(Playlist playlist) {
-        try {
-            dynamoDbMapper.save(playlist, dynamoDBMapperConfig);
-        } catch (InvalidAttributeValueException e) {
-            throw new InvalidAttributeValueException(e.getMessage());
-        }
-
+        // TODO: write unit test for save
+        dynamoDbMapper.save(playlist, dynamoDBMapperConfig);
         return playlist;
     }
 
