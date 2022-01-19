@@ -18,7 +18,7 @@ public class Playlist {
     private String id;
     private String name;
     private String customerId;
-    private Integer songCount;
+    private int songCount;
     private Set<String> tags;
     private List<AlbumTrack> songList;
 
@@ -76,5 +76,9 @@ public class Playlist {
 
     public void setSongList(List<AlbumTrack> songList) {
         this.songList = songList;
+    }
+
+    public String getTableName() {
+        return DynamoDBTable.class.getAnnotation(DynamoDBTable.class).tableName();
     }
 }

@@ -2,7 +2,7 @@ package com.amazon.ata.music.playlist.service.models.results;
 
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 
-public class UpdatePlaylistResult {
+public class UpdatePlaylistResult  {
     private PlaylistModel playlist;
 
     public UpdatePlaylistResult(Builder builder) {
