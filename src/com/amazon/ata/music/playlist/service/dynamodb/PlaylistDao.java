@@ -1,11 +1,15 @@
 package com.amazon.ata.music.playlist.service.dynamodb;
 
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
+import com.amazon.ata.music.playlist.service.models.requests.CreatePlaylistRequest;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 
 import static com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils.isValidString;
 
@@ -55,4 +59,16 @@ public class PlaylistDao {
 
         return playlist;
     }
+
+//    public Playlist createPlaylist(CreatePlaylistRequest request, String id) {
+//
+//
+//        request.setCustomerId(id);
+//        request.setName(request.getName());
+//        request.setTags(request.getTags());
+//
+//
+//
+//
+//    }
 }
