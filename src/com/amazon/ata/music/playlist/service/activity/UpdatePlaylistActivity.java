@@ -1,5 +1,6 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeChangeException;
@@ -9,15 +10,17 @@ import com.amazon.ata.music.playlist.service.models.requests.UpdatePlaylistReque
 import com.amazon.ata.music.playlist.service.models.results.UpdatePlaylistResult;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.naming.directory.InvalidAttributesException;
 import java.util.Objects;
 
 import static com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils.isValidString;
+
 
 /**
  * Implementation of the UpdatePlaylistActivity for the MusicPlaylistService's UpdatePlaylist API.
@@ -56,36 +59,38 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
      * @return updatePlaylistResult result object containing the API defined {@link PlaylistModel}
      */
     @Override
-    public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
+    public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context)
+            throws InvalidAttributeValueException, InvalidAttributeChangeException {
         log.info("Received UpdatePlaylistRequest {}", updatePlaylistRequest);
 
         String requestedId = updatePlaylistRequest.getId();
         String requestedName = updatePlaylistRequest.getName();
         String requestedCustomerId = updatePlaylistRequest.getCustomerId();
         Playlist playlist = playlistDao.getPlaylist(requestedId);
-        PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
-
         try {
-            playlistModel.setCustomerId(requestedCustomerId);
-            playlistModel.setName(requestedName);
+            playlistDao.savePlaylist(playlist);
 
-            if (requestedCustomerId == null) {
-                throw new InvalidAttributeValueException("Requested Customer name is invalid");
+            if (!isValidString(requestedName)) {
+                throw new InvalidAttributeValueException("Invalid playlist name or customer ID");
             }
 
             if (!Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
                 throw new InvalidAttributeChangeException("Cannot change customer ID");
             }
 
-            return UpdatePlaylistResult
-                    .builder()
-                    .withPlaylist(playlistModel)
-                    .build();
-
-
-        } catch (InvalidAttributeChangeException e) {
-            throw new InvalidAttributeChangeException("Cannot change customer ID", e);
+        } catch (InvalidAttributeChangeException | InvalidAttributeValueException e) {
+            log.error(e.getMessage());
+            throw e;
         }
+
+        playlist.setCustomerId(requestedCustomerId);
+        playlist.setName(requestedName);
+        PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
+
+        return UpdatePlaylistResult
+                .builder()
+                .withPlaylist(playlistModel)
+                .build();
 
     }
 

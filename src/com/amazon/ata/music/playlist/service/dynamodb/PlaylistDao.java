@@ -1,6 +1,7 @@
 package com.amazon.ata.music.playlist.service.dynamodb;
 
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -49,8 +50,11 @@ public class PlaylistDao {
      * @param playlist the Playlist to store
      */
     public Playlist savePlaylist(Playlist playlist) {
-
-        dynamoDbMapper.save(playlist, dynamoDBMapperConfig);
+        try {
+            dynamoDbMapper.save(playlist, dynamoDBMapperConfig);
+        } catch (InvalidAttributeValueException e) {
+            throw new InvalidAttributeValueException(e.getMessage());
+        }
 
         return playlist;
     }

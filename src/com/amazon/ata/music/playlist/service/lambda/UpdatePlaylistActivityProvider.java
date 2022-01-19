@@ -16,7 +16,8 @@ public class UpdatePlaylistActivityProvider implements RequestHandler<UpdatePlay
 
     @Override
     public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
-        return getApp().provideUpdatePlaylistActivity().handleRequest(updatePlaylistRequest, context);
+        return getApp().provideUpdatePlaylistActivity().handleRequest(updatePlaylistRequest,
+                context);
     }
 
     private App getApp() {
