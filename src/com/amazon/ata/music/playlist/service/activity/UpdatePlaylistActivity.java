@@ -59,24 +59,28 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
      * @return updatePlaylistResult result object containing the API defined {@link PlaylistModel}
      */
     @Override
-    public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context)
-            throws InvalidAttributeValueException, InvalidAttributeChangeException {
+    public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
         log.info("Received UpdatePlaylistRequest {}", updatePlaylistRequest);
 
         String requestedId = updatePlaylistRequest.getId();
         String requestedName = updatePlaylistRequest.getName();
         String requestedCustomerId = updatePlaylistRequest.getCustomerId();
-        Playlist playlist = playlistDao.getPlaylist(requestedId);
+        Playlist playlist = playlistDao.getPlaylist(requestedId);   // mapper loads playlist from dao
         try {
-            playlistDao.savePlaylist(playlist);
 
-            if (!isValidString(requestedName)) {
-                throw new InvalidAttributeValueException("Invalid playlist name or customer ID");
+            boolean validated = isValidString(requestedName)
+                    && isValidString(requestedCustomerId);
+
+            if (!validated) {
+                throw new InvalidAttributeValueException("Invalid characters entry in playlist name or customer ID");
             }
 
-            if (!Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
-                throw new InvalidAttributeChangeException("Cannot change customer ID");
+            if (Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
+                playlistDao.savePlaylist(playlist);
             }
+                else {
+                    throw new InvalidAttributeChangeException("Cannot change customer ID");
+                }
 
         } catch (InvalidAttributeChangeException | InvalidAttributeValueException e) {
             log.error(e.getMessage());

@@ -5,4 +5,5 @@
 build
 .idea
 bin
-src/resources/scr.uml
+out
+
