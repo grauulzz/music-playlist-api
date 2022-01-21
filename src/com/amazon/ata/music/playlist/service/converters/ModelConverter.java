@@ -1,7 +1,12 @@
 package com.amazon.ata.music.playlist.service.converters;
 
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.SongModel;
+
+import java.util.List;
+import java.util.Set;
 
 public class ModelConverter {
     /**
@@ -17,5 +22,10 @@ public class ModelConverter {
                 .withSongCount(playlist.getSongCount())
                 .withTags(playlist.getTags())
                 .build();
+    }
+
+    // TODO: Implement this method (this was one that was implemented in commented test #2)
+    public List<SongModel> toSongModelList(List<AlbumTrack> list) {
+        return List.of(SongModel.builder().build());
     }
 }

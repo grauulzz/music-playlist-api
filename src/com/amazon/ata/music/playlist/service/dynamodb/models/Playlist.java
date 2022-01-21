@@ -78,7 +78,7 @@ public class Playlist {
         this.songList = songList;
     }
 
-    public String getTableName() {
+    public String getPlaylistDBTableName() {
         return DynamoDBTable.class.getAnnotation(DynamoDBTable.class).tableName();
     }
 }
