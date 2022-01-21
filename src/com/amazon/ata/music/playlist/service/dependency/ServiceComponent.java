@@ -11,7 +11,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import dagger.Component;
 
 import javax.inject.Singleton;
-import java.security.Provider;
 
 @Component(modules = {
         DaoModule.class,
@@ -28,15 +27,25 @@ public interface ServiceComponent {
 //    void inject(CreatePlaylistActivity createPlaylistActivity);
 //    void inject(GetPlaylistActivity getPlaylistActivity);
 //    void inject(AddSongToPlaylistActivity addSongToPlaylistActivity);
-//    void inject(UpdatePlaylistActivity updatePlaylistActivity);
-
+//    void inject(UpdatePlaylistActivity updatePlaylistAct
 
     /**
      * Provides a new CreatePlaylistActivity with injected dependencies.
      *
+     * TODO: implement this CreatePlaylistActivity to bypass App
+     *
      * @return createPlaylistActivity a new CreatePlaylistActivity with injected dependencies.
      */
     CreatePlaylistActivity provideCreatePlaylistActivity();
+
+    /**
+     * Provides a new AddTrackToPlaylistActivity with injected dependencies.
+     *
+     * TODO: implement this AddTrackToPlaylistActivity to bypass App
+     *
+     * @return addTrackToPlaylistActivity a new AddTrackToPlaylistActivity with injected dependencies.
+     */
+    AddSongToPlaylistActivity provideAddSongToPlaylistActivity();
 
     /**
      * Provides a new GetPlaylistActivity with injected dependencies.
@@ -52,12 +61,7 @@ public interface ServiceComponent {
      */
     UpdatePlaylistActivity provideUpdatePlaylistActivity();
 
-    /**
-     * Provides a new AddTrackToPlaylistActivity with injected dependencies.
-     *
-     * @return addTrackToPlaylistActivity a new AddTrackToPlaylistActivity with injected dependencies.
-     */
-    AddSongToPlaylistActivity provideAddSongToPlaylistActivity();
+}
 
 
 //    void inject(Provider.Service service);
@@ -68,7 +72,7 @@ public interface ServiceComponent {
 //        Builder serviceModule(DaoModule module);
 //        ServiceComponent build();
 //    }
-}
+//}
 
 
 

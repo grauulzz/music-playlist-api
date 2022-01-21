@@ -28,24 +28,6 @@ public class App {
     }
 
     /**
-     * Provides a new GetPlaylistActivity with injected dependencies.
-     *
-     * @return getPlaylistActivity a new GetPlaylistActivity with injected dependencies.
-     */
-    public GetPlaylistActivity provideGetPlaylistActivity() {
-        return new GetPlaylistActivity(providePlaylistDao());
-    }
-
-    /**
-     * Provides a new UpdatePlaylistActivity with injected dependencies.
-     *
-     * @return updatePlaylistActivity a new UpdatePlaylistActivity with injected dependencies.
-     */
-    public UpdatePlaylistActivity provideUpdatePlaylistActivity() {
-        return new UpdatePlaylistActivity(providePlaylistDao());
-    }
-
-    /**
      * Provides a new AddSongToPlaylistActivity with injected dependencies.
      *
      * @return addSongToPlaylistActivity a new AddSongToPlaylistActivity with injected dependencies.
@@ -63,10 +45,12 @@ public class App {
         return new GetPlaylistSongsActivity(providePlaylistDao());
     }
 
+    // TODO: use dagger inject to provide PlaylistDao where this is using it
     private PlaylistDao providePlaylistDao() {
         return new PlaylistDao(provideDynamoDBMapper());
     }
 
+    // TODO: use dagger inject to provide AlbumDao where this is using it
     private AlbumTrackDao provideAlbumTrackDao() {
         return new AlbumTrackDao(provideDynamoDBMapper());
     }
@@ -78,7 +62,8 @@ public class App {
      */
     private DynamoDBMapper provideDynamoDBMapper() {
         if (null == dynamoDBMapper) {
-            dynamoDBMapper = new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient(Regions.US_WEST_2));
+            dynamoDBMapper = new DynamoDBMapper(DynamoDbClientProvider
+                    .getDynamoDBClient(Regions.US_EAST_2));
         }
         return dynamoDBMapper;
     }

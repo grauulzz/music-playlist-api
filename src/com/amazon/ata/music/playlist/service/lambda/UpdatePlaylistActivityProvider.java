@@ -1,14 +1,13 @@
 package com.amazon.ata.music.playlist.service.lambda;
 
-import com.amazon.ata.music.playlist.service.dependency.App;
 import com.amazon.ata.music.playlist.service.models.requests.UpdatePlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.UpdatePlaylistResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class UpdatePlaylistActivityProvider implements RequestHandler<UpdatePlaylistRequest, UpdatePlaylistResult> {
+import static com.amazon.ata.music.playlist.service.dependency.ComponentSelector.daggerUpdatePlaylistActivity;
 
-    private static App app;
+public class UpdatePlaylistActivityProvider implements RequestHandler<UpdatePlaylistRequest, UpdatePlaylistResult> {
 
     public UpdatePlaylistActivityProvider() {
 
@@ -16,15 +15,8 @@ public class UpdatePlaylistActivityProvider implements RequestHandler<UpdatePlay
 
     @Override
     public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
-        return getApp().provideUpdatePlaylistActivity().handleRequest(updatePlaylistRequest,
+        return daggerUpdatePlaylistActivity().handleRequest(updatePlaylistRequest,
                 context);
     }
 
-    private App getApp() {
-        if (app == null) {
-            app = new App();
-        }
-
-        return app;
-    }
 }
