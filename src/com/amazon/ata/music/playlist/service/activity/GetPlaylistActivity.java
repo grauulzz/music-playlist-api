@@ -58,11 +58,6 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
             throw new PlaylistNotFoundException("Could not find playlist with id " + playlistId);
         }
 
-//        ServiceComponent serviceComponent = DaggerServiceComponent.create();
-//
-//        return serviceComponent.provideGetPlaylistActivity()
-//                .handleRequest(getPlaylistRequest, context);
-
         return GetPlaylistResult
                 .builder()
                 .withPlaylist(new ModelConverter()
@@ -70,3 +65,6 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
                         .build();
     }
 }
+
+//        PlaylistDao injectedPlaylistDao = DaggerServiceComponent.builder().build().getPlaylistDao();
+//        Playlist playlist = injectedPlaylistDao.getPlaylist(playlistId);

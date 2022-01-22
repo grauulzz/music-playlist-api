@@ -19,15 +19,10 @@ import javax.inject.Singleton;
 public interface ServiceComponent {
 
     DynamoDBMapper provideDynamoDBMapper();
-    PlaylistDao providePlaylistDao();
+
     AlbumTrackDao provideAlbumTrackDao();
 
     PlaylistDao getPlaylistDao();
-
-//    void inject(CreatePlaylistActivity createPlaylistActivity);
-//    void inject(GetPlaylistActivity getPlaylistActivity);
-//    void inject(AddSongToPlaylistActivity addSongToPlaylistActivity);
-//    void inject(UpdatePlaylistActivity updatePlaylistAct
 
     /**
      * Provides a new CreatePlaylistActivity with injected dependencies.
@@ -74,6 +69,11 @@ public interface ServiceComponent {
 //    }
 //}
 
+
+//    void inject(CreatePlaylistActivity createPlaylistActivity);
+//    void inject(GetPlaylistActivity getPlaylistActivity);
+//    void inject(AddSongToPlaylistActivity addSongToPlaylistActivity);
+//    void inject(UpdatePlaylistActivity updatePlaylistAct
 
 
 

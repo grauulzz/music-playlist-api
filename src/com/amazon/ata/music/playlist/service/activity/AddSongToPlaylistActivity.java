@@ -1,5 +1,10 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.converters.AlbumTrackLinkedListConverter;
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
+import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.AlbumTrackNotFoundException;
+import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 import com.amazon.ata.music.playlist.service.models.requests.AddSongToPlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.AddSongToPlaylistResult;
 import com.amazon.ata.music.playlist.service.models.SongModel;
@@ -8,11 +13,13 @@ import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.google.common.base.Equivalence;
+import com.google.common.collect.Sets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Implementation of the AddSongToPlaylistActivity for the MusicPlaylistService's AddSongToPlaylist API.
@@ -23,6 +30,9 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
     private final Logger log = LogManager.getLogger();
     private final PlaylistDao playlistDao;
     private final AlbumTrackDao albumTrackDao;
+    SongModel songModel = new SongModel();
+
+
 
     /**
      * Instantiates a new AddSongToPlaylistActivity object.
@@ -52,11 +62,44 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
      *                                 API defined {@link SongModel}s
      */
     @Override
-    public AddSongToPlaylistResult handleRequest(final AddSongToPlaylistRequest addSongToPlaylistRequest, Context context) {
+    public AddSongToPlaylistResult handleRequest(final AddSongToPlaylistRequest addSongToPlaylistRequest,
+                                                 Context context) {
         log.info("Received AddSongToPlaylistRequest {} ", addSongToPlaylistRequest);
+        String playlistId = addSongToPlaylistRequest.getId();
+        String asin = addSongToPlaylistRequest.getAsin();
+        int trackNumber = addSongToPlaylistRequest.getTrackNumber();
+
+        Playlist playlist = playlistDao.getPlaylist(playlistId);
+        AlbumTrack albumTrack = albumTrackDao.getAlbumTrack(asin, trackNumber);
+        List<SongModel> songList = new ArrayList<>(playlist.getSongList().size());
+
+        songModel = SongModel.builder()
+                .withTrackNumber(trackNumber)
+                .withAsin(asin)
+                .withAlbum(albumTrack.getAlbumName())
+                .withTitle(albumTrack.getSongTitle())
+                .build();
+
+        songList.add(songModel);
+
+        try {
+            playlist.getSongList().forEach(track -> {
+                if (!track.equals(albumTrack)) {
+                    songList.add(0, songModel);
+                }
+            });
+
+            playlistDao.savePlaylist(playlist);
+
+        } catch (PlaylistNotFoundException | AlbumTrackNotFoundException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+
+        log.info("Returning AddSongToPlaylistResult {} ", songList);
 
         return AddSongToPlaylistResult.builder()
-                .withSongList(Collections.singletonList(new SongModel()))
+                .withSongList(songList)
                 .build();
     }
 }
