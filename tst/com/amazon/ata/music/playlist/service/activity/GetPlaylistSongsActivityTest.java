@@ -46,10 +46,12 @@ class GetPlaylistSongsActivityTest {
         when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
 
         // WHEN
-        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request, null);
+        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request,
+                null);
 
         // THEN
-        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(playlist.getSongList(), result.getSongList());
+        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(playlist.getSongList(),
+                result.getSongList());
     }
 
     @Test

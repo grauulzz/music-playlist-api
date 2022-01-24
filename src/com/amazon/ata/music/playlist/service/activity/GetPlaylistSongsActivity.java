@@ -1,5 +1,10 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.converters.ModelConverter;
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
+import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
+import com.amazon.ata.music.playlist.service.models.SongOrder;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistSongsRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistSongsResult;
 import com.amazon.ata.music.playlist.service.models.SongModel;
@@ -11,7 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
-import java.util.Collections;
+import java.util.*;
+
+import static com.amazon.ata.music.playlist.service.models.SongOrder.getOrderedCollections;
 
 /**
  * Implementation of the GetPlaylistSongsActivity for the MusicPlaylistService's GetPlaylistSongs API.
@@ -43,11 +50,21 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
      * @return getPlaylistSongsResult result object containing the playlist's list of API defined {@link SongModel}s
      */
     @Override
-    public GetPlaylistSongsResult handleRequest(final GetPlaylistSongsRequest getPlaylistSongsRequest, Context context) {
+    public GetPlaylistSongsResult handleRequest(final GetPlaylistSongsRequest getPlaylistSongsRequest,
+                                                Context context) {
         log.info("Received GetPlaylistSongsRequest {}", getPlaylistSongsRequest);
-        // TODO: get playlist songs
+
+        String playlistId = getPlaylistSongsRequest.getId();
+        Playlist playlist = playlistDao.getPlaylist(playlistId);
+        SongOrder songOrder = getPlaylistSongsRequest.getOrder();
+        
+
+        List<SongModel> songModels = new ModelConverter().toSongModelList(playlist.getSongList());
+
         return GetPlaylistSongsResult.builder()
-                .withSongList(Collections.singletonList(new SongModel()))
+                .withSongList(new ArrayList<>(getOrderedCollections(songOrder,
+                        songModels)))
                 .build();
+
     }
 }

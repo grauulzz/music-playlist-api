@@ -6,6 +6,7 @@ public class DaoSelector {
 
     // don't know if this is necessary
     DaoSelector(DaoModule daoModule) {
-        component = DaggerServiceComponent.builder().daoModule(daoModule).build();
+        component = DaggerServiceComponent.builder().daoModule(daoModule)
+                .build();
     }
 }

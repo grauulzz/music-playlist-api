@@ -1,10 +1,7 @@
 package com.amazon.ata.music.playlist.service.dependency;
 
 
-import com.amazon.ata.music.playlist.service.activity.AddSongToPlaylistActivity;
-import com.amazon.ata.music.playlist.service.activity.CreatePlaylistActivity;
-import com.amazon.ata.music.playlist.service.activity.GetPlaylistActivity;
-import com.amazon.ata.music.playlist.service.activity.UpdatePlaylistActivity;
+import com.amazon.ata.music.playlist.service.activity.*;
 import com.amazon.ata.music.playlist.service.dynamodb.AlbumTrackDao;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -22,7 +19,7 @@ public interface ServiceComponent {
 
     AlbumTrackDao provideAlbumTrackDao();
 
-    PlaylistDao getPlaylistDao();
+    PlaylistDao providePlaylistDao();
 
     /**
      * Provides a new CreatePlaylistActivity with injected dependencies.
@@ -41,6 +38,11 @@ public interface ServiceComponent {
      * @return addTrackToPlaylistActivity a new AddTrackToPlaylistActivity with injected dependencies.
      */
     AddSongToPlaylistActivity provideAddSongToPlaylistActivity();
+
+    /**
+     * Provides a new DeletePlaylistActivity with injected dependencies.
+     */
+    GetPlaylistSongsActivity provideGetPlaylistSongsActivity();
 
     /**
      * Provides a new GetPlaylistActivity with injected dependencies.
