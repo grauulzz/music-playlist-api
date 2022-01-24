@@ -19,6 +19,7 @@ public class GetPlaylistSongsActivityProvider implements RequestHandler<GetPlayl
         return getApp().provideGetPlaylistSongsActivity().handleRequest(getPlaylistSongsRequest, context);
     }
 
+    // TODO: replace with DI
     private App getApp() {
         if (app == null) {
             app = new App();

@@ -73,6 +73,8 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
         AlbumTrack albumTrack = albumTrackDao.getAlbumTrack(asin, trackNumber);
         List<SongModel> songList = new ArrayList<>(playlist.getSongList().size());
 
+        // TODO: there's a way to get a list of SongModel from ModelConverter,
+        //  but I didn't realise it so this is a mess
         songModel = SongModel.builder()
                 .withTrackNumber(trackNumber)
                 .withAsin(asin)
@@ -81,7 +83,6 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
                 .build();
 
         songList.add(songModel);
-
         try {
             playlist.getSongList().forEach(track -> {
                 if (!track.equals(albumTrack)) {

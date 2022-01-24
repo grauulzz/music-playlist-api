@@ -19,6 +19,7 @@ public class CreatePlaylistActivityProvider implements RequestHandler<CreatePlay
         return getApp().provideCreatePlaylistActivity().handleRequest(createPlaylistRequest, context);
     }
 
+    // TODO: replace with DI
     private App getApp() {
         if (app == null) {
             app = new App();

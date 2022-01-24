@@ -16,6 +16,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
  * This class manages service dependencies.
  */
 public class App {
+
+    // TODO: replace entire app class with dependency injection from dagger
     private DynamoDBMapper dynamoDBMapper;
 
     /**

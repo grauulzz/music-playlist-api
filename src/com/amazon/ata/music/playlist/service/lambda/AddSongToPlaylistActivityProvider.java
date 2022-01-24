@@ -19,6 +19,7 @@ public class AddSongToPlaylistActivityProvider implements RequestHandler<AddSong
         return getApp().provideAddSongToPlaylistActivity().handleRequest(addSongToPlaylistRequest, context);
     }
 
+    // TODO: replace with DI
     private App getApp() {
         if (app == null) {
             app = new App();

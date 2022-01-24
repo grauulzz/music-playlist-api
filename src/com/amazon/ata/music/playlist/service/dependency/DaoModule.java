@@ -13,6 +13,8 @@ import javax.inject.Singleton;
 @Module
 public class DaoModule {
 
+    // how dagger knows what to generate DI for
+    // (marked by @Inject on constructors you want to generate instances of with dagger)
     @Provides
     @Singleton
     public DynamoDBMapper provideDynamoDBMapper() {

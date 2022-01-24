@@ -47,7 +47,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
     @Override
     public CreatePlaylistResult handleRequest(final CreatePlaylistRequest createPlaylistRequest, Context context) {
         log.info("Received CreatePlaylistRequest {}", createPlaylistRequest);
-
+        // TODO: create playlist
         return CreatePlaylistResult.builder()
                 .withPlaylist(new PlaylistModel())
                 .build();

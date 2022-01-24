@@ -45,7 +45,7 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
     @Override
     public GetPlaylistSongsResult handleRequest(final GetPlaylistSongsRequest getPlaylistSongsRequest, Context context) {
         log.info("Received GetPlaylistSongsRequest {}", getPlaylistSongsRequest);
-
+        // TODO: get playlist songs
         return GetPlaylistSongsResult.builder()
                 .withSongList(Collections.singletonList(new SongModel()))
                 .build();
