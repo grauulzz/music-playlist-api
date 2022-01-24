@@ -1,5 +1,7 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.dependency.DaggerServiceComponent;
+import com.amazon.ata.music.playlist.service.dependency.ServiceComponent;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistResult;
@@ -63,3 +65,6 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
                         .build();
     }
 }
+
+//        PlaylistDao injectedPlaylistDao = DaggerServiceComponent.builder().build().getPlaylistDao();
+//        Playlist playlist = injectedPlaylistDao.getPlaylist(playlistId);

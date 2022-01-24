@@ -22,7 +22,8 @@ public class AlbumTrackDao {
         this.dynamoDbMapper = dynamoDbMapper;
     }
 
-    // TODO: Add methods to access data for an album  (this was one that was implemented in commented test)
+    // TODO: Add methods to access data for an album
+    //  (this was one of the methods the test was looking for when uncommented (one of the Helper tests))
     public AlbumTrack getAlbumTrack(String asin, int trackNumber) {
         return dynamoDbMapper.load(AlbumTrack.class, asin, trackNumber);
     }

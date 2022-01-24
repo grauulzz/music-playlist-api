@@ -4,11 +4,14 @@ import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.models.SongModel;
+import com.amazon.ata.music.playlist.service.models.results.GetPlaylistResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class ModelConverter {
+
     /**
      * Converts a provided {@link Playlist} into a {@link PlaylistModel} representation.
      * @param playlist the playlist to convert
@@ -26,6 +29,14 @@ public class ModelConverter {
 
     // TODO: Implement this method (this was one that was implemented in commented test #2)
     public List<SongModel> toSongModelList(List<AlbumTrack> list) {
-        return List.of(SongModel.builder().build());
+        List<SongModel> songModelList = new ArrayList<>(list.size());
+        list.forEach(albumTrack -> songModelList.add(SongModel.builder()
+                .withTrackNumber(albumTrack.getTrackNumber())
+                .withAsin(albumTrack.getAsin())
+                .withAlbum(albumTrack.getAlbumName())
+                .withTitle(albumTrack.getSongTitle())
+                .build()));
+
+        return songModelList;
     }
 }

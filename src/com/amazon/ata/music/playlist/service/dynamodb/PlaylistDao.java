@@ -1,10 +1,18 @@
 package com.amazon.ata.music.playlist.service.dynamodb;
 
+import com.amazon.ata.music.playlist.service.dependency.DaggerServiceComponent;
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
+import com.amazon.ata.music.playlist.service.models.SongModel;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 import javax.inject.Inject;
+import java.util.List;
 
 
 /**
@@ -12,10 +20,16 @@ import javax.inject.Inject;
  */
 public class PlaylistDao {
     private final DynamoDBMapper dynamoDbMapper;
-    private final DynamoDBMapperConfig dynamoDBMapperConfig = new DynamoDBMapperConfig.Builder()
+    private final DynamoDBMapperConfig configUpdate = new DynamoDBMapperConfig.Builder()
             .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT)
             .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE)
             .build();
+
+    private final DynamoDBMapperConfig configPut = new DynamoDBMapperConfig.Builder()
+            .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT)
+            .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.CLOBBER)
+            .build();
+
 
     /**
      * Instantiates a PlaylistDao object.
@@ -43,19 +57,11 @@ public class PlaylistDao {
      * @param playlist the Playlist to save
      */
     public Playlist savePlaylist(Playlist playlist) {
-        // TODO: write unit test for save
-        dynamoDbMapper.save(playlist, dynamoDBMapperConfig);
+        dynamoDbMapper.save(playlist, configUpdate);
         return playlist;
     }
 
-    public Playlist savePlaylistCustomerId(Playlist playlist) {
-
-        dynamoDbMapper.save(playlist.getCustomerId(), dynamoDBMapperConfig);
-
-        return playlist;
-    }
-
-//    public Playlist createPlaylist(CreatePlaylistRequest request, String id) {
+    //    public Playlist createPlaylist(CreatePlaylistRequest request, String id) {
 //
 //
 //        request.setCustomerId(id);
@@ -66,4 +72,8 @@ public class PlaylistDao {
 //
 //
 //    }
+
+
+
+
 }
