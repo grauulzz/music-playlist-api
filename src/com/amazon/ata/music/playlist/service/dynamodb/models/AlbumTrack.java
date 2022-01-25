@@ -20,9 +20,17 @@ public class AlbumTrack {
         return asin;
     }
 
+    public void setAsin(String asin) {
+        this.asin = asin;
+    }
+
     @DynamoDBRangeKey(attributeName = "track_number")
     public Integer getTrackNumber() {
         return trackNumber;
+    }
+
+    public void setTrackNumber(Integer trackNumber) {
+        this.trackNumber = trackNumber;
     }
 
     @DynamoDBAttribute(attributeName = "album_name")
@@ -30,24 +38,17 @@ public class AlbumTrack {
         return albumName;
     }
 
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
     @DynamoDBAttribute(attributeName = "song_title")
     public String getSongTitle() {
         return songTitle;
     }
 
-    public void setAsin(String asin) {
-        this.asin = asin;
-    }
-
-    public void setTrackNumber(Integer trackNumber) {
-        this.trackNumber = trackNumber;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
-
     public void setSongTitle(String songTitle) {
         this.songTitle = songTitle;
     }
+
 }

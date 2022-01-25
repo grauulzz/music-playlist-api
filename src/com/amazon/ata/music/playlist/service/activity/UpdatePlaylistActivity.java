@@ -1,31 +1,27 @@
 package com.amazon.ata.music.playlist.service.activity;
 
-import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
+import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeChangeException;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.models.requests.UpdatePlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.UpdatePlaylistResult;
-import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.inject.Inject;
 import java.util.Objects;
+import javax.inject.Inject;
 
 import static com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils.isValidString;
 
 
 /**
  * Implementation of the UpdatePlaylistActivity for the MusicPlaylistService's UpdatePlaylist API.
- *
  * This API allows the customer to update their saved playlist's information.
  */
 public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequest, UpdatePlaylistResult> {
@@ -67,9 +63,9 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
         String requestedId = updatePlaylistRequest.getId();
         String requestedName = updatePlaylistRequest.getName();
         String requestedCustomerId = updatePlaylistRequest.getCustomerId();
-        Playlist playlist = playlistDao.getPlaylist(requestedId);   // mapper.load is executed during get request
-        boolean validated = isValidString(requestedName)
-                && isValidString(requestedCustomerId);
+        Playlist playlist = playlistDao.getPlaylist(requestedId);
+        boolean validated = isValidString(requestedName) &&
+                isValidString(requestedCustomerId);
 
         try {
             playlistDao.savePlaylist(playlist);
@@ -82,120 +78,22 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
                 playlist.setCustomerId(requestedCustomerId);
                 playlist.setName(requestedName);
 
+            } else {
+                throw new InvalidAttributeChangeException("Cannot change customer ID");
             }
-                else {
-                    throw new InvalidAttributeChangeException("Cannot change customer ID");
-                }
 
         } catch (InvalidAttributeChangeException | InvalidAttributeValueException e) {
             log.error(e.getMessage());
             throw e;
         }
 
-
-
         return UpdatePlaylistResult
                 .builder()
                 .withPlaylist(new ModelConverter()
                         .toPlaylistModel(playlist))
-                        .build();
+                .build();
 
     }
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Override
-//    public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
-//        log.info("Received UpdatePlaylistRequest {}", updatePlaylistRequest);
-//
-//        String requestedId = updatePlaylistRequest.getId();
-//        String requestedName = updatePlaylistRequest.getName();
-//        String requestedCustomerId = updatePlaylistRequest.getCustomerId();
-//        Playlist playlist = playlistDao.getPlaylist(requestedId);
-//
-//        try {
-//            playlist.setCustomerId(requestedCustomerId);
-//            playlist.setName(requestedName);
-//
-//            if (!Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
-//                throw new InvalidAttributeChangeException("Cannot change customer ID");
-//            }
-//
-//            if (playlist.getName() == null) {
-//                throw new InvalidAttributesException("Requested Customer name is invalid");
-//            }
-//
-//            PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
-//
-//
-//            return UpdatePlaylistResult
-//                    .builder()
-//                    .withPlaylist(playlistModel)
-//                    .build();
-//
-//        } catch (InvalidAttributesException e) {
-//            log.error("Invalid attributes exception", e);
-//            throw new InvalidAttributeValueException(e.getMessage());
-//        }
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        if (!Objects.equals(playlist.getCustomerId(), updatePlaylistRequest.getCustomerId())) {
-//                throw new InvalidAttributeChangeException("Cannot change customer ID");
-//                }
-
-//        try {
-//            Playlist playlist = playlistDao.getPlaylist(updatePlaylistRequest.getId());
-//
-//            if (!Objects.equals(playlist.getCustomerId(), updatePlaylistRequest.getCustomerId())) {
-//                throw new InvalidAttributeChangeException("Cannot change customer ID");
-//            }
-//
-//        } catch (InvalidAttributeChangeException e) {
-//            log.error("InvalidAttributeChangeException: {}", e.getMessage());
-//        }

@@ -1,28 +1,27 @@
 package com.amazon.ata.music.playlist.service.activity;
 
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
-import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
+import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
-import com.amazon.ata.music.playlist.service.models.PlaylistModel;
+import com.amazon.ata.music.playlist.service.models.SongModel;
 import com.amazon.ata.music.playlist.service.models.SongOrder;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistSongsRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistSongsResult;
-import com.amazon.ata.music.playlist.service.models.SongModel;
-import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
-import java.util.*;
 
 import static com.amazon.ata.music.playlist.service.models.SongOrder.getOrderedCollections;
 
 /**
  * Implementation of the GetPlaylistSongsActivity for the MusicPlaylistService's GetPlaylistSongs API.
- *
+ * <p>
  * This API allows the customer to get the list of songs of a saved playlist.
  */
 public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongsRequest, GetPlaylistSongsResult> {
@@ -57,9 +56,11 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
         String playlistId = getPlaylistSongsRequest.getId();
         Playlist playlist = playlistDao.getPlaylist(playlistId);
         SongOrder songOrder = getPlaylistSongsRequest.getOrder();
-        
-
         List<SongModel> songModels = new ModelConverter().toSongModelList(playlist.getSongList());
+
+        if (songOrder == null) {
+            return GetPlaylistSongsResult.builder().withSongList(songModels).build();
+        }
 
         return GetPlaylistSongsResult.builder()
                 .withSongList(new ArrayList<>(getOrderedCollections(songOrder,
@@ -67,4 +68,6 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
                 .build();
 
     }
+
 }
+

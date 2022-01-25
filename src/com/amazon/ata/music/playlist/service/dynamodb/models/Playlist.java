@@ -81,4 +81,6 @@ public class Playlist {
     public String getPlaylistDBTableName() {
         return DynamoDBTable.class.getAnnotation(DynamoDBTable.class).tableName();
     }
+
 }
+

@@ -1,25 +1,27 @@
 package com.amazon.ata.music.playlist.service.converters;
 
 import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
-import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.models.SongModel;
-import com.amazon.ata.music.playlist.service.models.results.GetPlaylistResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * The type Model converter.
+ */
 public class ModelConverter {
 
     /**
-     * Converts a provided {@link Playlist} into a {@link PlaylistModel} representation.
-     * @param playlist the playlist to convert
-     * @return the converted playlist
+     * To playlist model.
+     *
+     * @param playlist DynamoDB Playlist
+     * @return PlaylistModel playlist model
      */
     public PlaylistModel toPlaylistModel(Playlist playlist) {
         return PlaylistModel.builder()
-            .withId(playlist.getId())
+                .withId(playlist.getId())
                 .withName(playlist.getName())
                 .withCustomerId(playlist.getCustomerId())
                 .withSongCount(playlist.getSongCount())
@@ -27,7 +29,12 @@ public class ModelConverter {
                 .build();
     }
 
-    // TODO: Implement this method (this was one that was implemented in commented test #2)
+    /**
+     * To song model list.
+     *
+     * @param list DynamoDB Playlist list
+     * @return PlaylistModel list
+     */
     public List<SongModel> toSongModelList(List<AlbumTrack> list) {
         List<SongModel> songModelList = new ArrayList<>(list.size());
         list.forEach(albumTrack -> songModelList.add(SongModel.builder()
@@ -39,4 +46,6 @@ public class ModelConverter {
 
         return songModelList;
     }
+
 }
+
