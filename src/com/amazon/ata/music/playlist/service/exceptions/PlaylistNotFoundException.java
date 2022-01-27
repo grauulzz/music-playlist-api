@@ -16,6 +16,7 @@ public class PlaylistNotFoundException extends RuntimeException {
 
     /**
      * Exception with a message, but no cause.
+     *
      * @param message A descriptive message for this exception.
      */
     public PlaylistNotFoundException(String message) {
@@ -24,6 +25,7 @@ public class PlaylistNotFoundException extends RuntimeException {
 
     /**
      * Exception with no message, but with a cause.
+     *
      * @param cause The original throwable resulting in this exception.
      */
     public PlaylistNotFoundException(Throwable cause) {
@@ -32,10 +34,13 @@ public class PlaylistNotFoundException extends RuntimeException {
 
     /**
      * Exception with message and cause.
+     *
      * @param message A descriptive message for this exception.
-     * @param cause The original throwable resulting in this exception.
+     * @param cause   The original throwable resulting in this exception.
      */
     public PlaylistNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
+
 }
+

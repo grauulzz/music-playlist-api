@@ -85,10 +85,12 @@ class GetPlaylistSongsActivityTest {
         when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
 
         // WHEN
-        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request, null);
+        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request,
+                null);
 
         // THEN
-        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(playlist.getSongList(), result.getSongList());
+        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(playlist.getSongList(),
+                result.getSongList());
     }
 
     @Test
@@ -106,10 +108,12 @@ class GetPlaylistSongsActivityTest {
         when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
 
         // WHEN
-        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request, null);
+        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request,
+                null);
 
         // THEN
-        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(reversedAlbumTracks, result.getSongList());
+        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(reversedAlbumTracks,
+                result.getSongList());
     }
 
     @Test
@@ -121,7 +125,7 @@ class GetPlaylistSongsActivityTest {
 
         GetPlaylistSongsRequest request = GetPlaylistSongsRequest.builder()
                                               .withId(playlistId)
-                                              .withOrder(SongOrder.REVERSED)
+                                              .withOrder(SongOrder.SHUFFLED)
                                               .build();
         when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
 
@@ -159,17 +163,20 @@ class GetPlaylistSongsActivityTest {
         assertThrows(PlaylistNotFoundException.class, () -> getPlaylistSongsActivity.handleRequest(request, null));
     }
 
-//    @Test
-//    public void handleRequest_withInvalidSongOrder_throwsException() {
-//        // GIVEN
-//        Playlist playlist = PlaylistTestHelper.generatePlaylist();
-//        String id = playlist.getId();
-//        GetPlaylistSongsRequest request = GetPlaylistSongsRequest.builder()
-//            .withId(id)
-//            .withOrder("NOT A VALID ORDER")
-//            .build();
-//
-//        // WHEN + THEN
-//        assertThrows(IllegalArgumentException.class, () -> getPlaylistSongsActivity.handleRequest(request));
-//    }
+    @Test
+    void handleRequest_withInvalidSongOrder_throwsException() {
+        // GIVEN
+        Playlist playlist = PlaylistTestHelper.generatePlaylist();
+        String id = playlist.getId();
+        GetPlaylistSongsRequest request = GetPlaylistSongsRequest.builder()
+            .withId(id)
+            .withOrder(SongOrder.DEFAULT)
+            .build();
+
+        request.setOrder(null);
+
+        // WHEN + THEN
+        assertThrows(NullPointerException.class,
+                () -> getPlaylistSongsActivity.handleRequest(request, null));
+    }
 }

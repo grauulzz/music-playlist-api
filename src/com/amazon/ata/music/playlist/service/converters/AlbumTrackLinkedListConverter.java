@@ -20,14 +20,25 @@ public class AlbumTrackLinkedListConverter implements DynamoDBTypeConverter<Stri
     private static final Gson GSON = new Gson();
     private final Logger log = LogManager.getLogger();
 
+    /**
+     * @param listToBeConverted the list to be converted
+     * @return the converted string representation of the list
+     */
     @Override
     public String convert(List listToBeConverted) {
         return GSON.toJson(listToBeConverted);
     }
 
+    /**
+     * @param dynamoDbRepresentation the string representation of the list
+     * @return the converted list to be unconverted
+     */
     @Override
     public List unconvert(String dynamoDbRepresentation) {
         // need to provide the type parameter of the list to convert correctly
-        return GSON.fromJson(dynamoDbRepresentation, new TypeToken<LinkedList<AlbumTrack>>() { } .getType());
+        return GSON.fromJson(dynamoDbRepresentation, new TypeToken<LinkedList<AlbumTrack>>() {
+        }.getType());
     }
+
 }
+

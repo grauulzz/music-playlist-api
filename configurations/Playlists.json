@@ -1,0 +1,21 @@
+{
+    "playlists": [
+        {
+            "GetPlaylistRequest": {
+                "Item": {
+                    "id": "PPT03"
+                }
+            },
+
+            "CreatePlaylistRequest" : {
+                "Item" : {
+                    "name": "new playlist",
+                    "customerId": "1",
+                    "tags": [
+                        "new tag"
+                    ]
+                }
+            }
+        }
+    ]
+}

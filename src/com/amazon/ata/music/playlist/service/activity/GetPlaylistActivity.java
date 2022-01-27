@@ -1,14 +1,12 @@
 package com.amazon.ata.music.playlist.service.activity;
 
-import com.amazon.ata.music.playlist.service.dependency.DaggerServiceComponent;
-import com.amazon.ata.music.playlist.service.dependency.ServiceComponent;
-import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
-import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistRequest;
-import com.amazon.ata.music.playlist.service.models.results.GetPlaylistResult;
-import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
+import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistRequest;
+import com.amazon.ata.music.playlist.service.models.results.GetPlaylistResult;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -21,7 +19,7 @@ import static com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUti
 
 /**
  * Implementation of the GetPlaylistActivity for the MusicPlaylistService's GetPlaylist API.
- *
+ * <p>
  * This API allows the customer to get one of their saved playlists.
  */
 public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, GetPlaylistResult> {
@@ -52,19 +50,17 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
     public GetPlaylistResult handleRequest(final GetPlaylistRequest getPlaylistRequest, Context context) {
         log.info("Received GetPlaylistRequest {}", getPlaylistRequest);
         String playlistId = getPlaylistRequest.getId();
+
         Playlist playlist = playlistDao.getPlaylist(playlistId);
 
         if (!isValidString(playlistId)) {
             throw new PlaylistNotFoundException("Could not find playlist with id " + playlistId);
         }
 
-        return GetPlaylistResult
-                .builder()
-                .withPlaylist(new ModelConverter()
-                        .toPlaylistModel(playlist))
-                        .build();
+        return GetPlaylistResult.builder()
+                .withPlaylist(new ModelConverter().toPlaylistModel(playlist))
+                .build();
     }
+
 }
 
-//        PlaylistDao injectedPlaylistDao = DaggerServiceComponent.builder().build().getPlaylistDao();
-//        Playlist playlist = injectedPlaylistDao.getPlaylist(playlistId);

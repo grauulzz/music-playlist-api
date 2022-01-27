@@ -32,6 +32,17 @@ tasks.withType(Checkstyle) {
 
 check.dependsOn jacocoTestCoverageVerification
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/amazon/ata/music/playlist/service/activity/**/AddSongToPlaylistActivity_Factory.class",
+                    "com/amazon/ata/music/playlist/service/activity/**/CreatePlaylistActivity_Factory.class",
+                    "com/amazon/ata/music/playlist/service/activity/**/UpdatePlaylistActivity_Factory.class",
+                    "com/amazon/ata/music/playlist/service/activity/**/GetPlaylistActivity_Factory.class",
+                    "com/amazon/ata/music/playlist/service/activity/**/GetPlaylistSongsActivity_Factory.class",
+            ])
+        }))
+    }
     violationRules {
         rule {
             limit {
