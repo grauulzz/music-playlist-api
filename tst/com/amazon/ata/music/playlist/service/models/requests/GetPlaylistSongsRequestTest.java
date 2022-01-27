@@ -18,10 +18,10 @@ class GetPlaylistSongsRequestTest {
 
 
     private final String newId = "newId";
-    private final SongOrder newSongOrder = SongOrder.SHUFFLED;
+    private final SongOrder shuffled = SongOrder.SHUFFLED;
 
     private final GetPlaylistSongsRequest sameRequestDiffObject = new GetPlaylistSongsRequest(id, songOrder);
-    private final GetPlaylistSongsRequest newRequest = new GetPlaylistSongsRequest(newId, newSongOrder);
+    private final GetPlaylistSongsRequest newRequest = new GetPlaylistSongsRequest(newId, shuffled);
 
     @Mock
     private GetPlaylistSongsRequest request;
@@ -45,12 +45,12 @@ class GetPlaylistSongsRequestTest {
     void testSetters() {
 
         request.setId(newId);
-        request.setOrder(newSongOrder);
+        request.setOrder(shuffled);
 
 
         assertAll(
                 () -> Assertions.assertEquals(newId, request.getId()),
-                () -> Assertions.assertEquals(newSongOrder, request.getOrder())
+                () -> Assertions.assertEquals(shuffled, request.getOrder())
         );
     }
 
@@ -79,7 +79,7 @@ class GetPlaylistSongsRequestTest {
         GetPlaylistSongsRequest obj1 = GetPlaylistSongsRequest.builder().build();
         GetPlaylistSongsRequest obj2 = GetPlaylistSongsRequest.builder()
                 .withId(newId)
-                .withOrder(newSongOrder)
+                .withOrder(shuffled)
                 .build();
 
         assertAll(

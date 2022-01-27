@@ -46,17 +46,17 @@ class AddSongToPlaylistActivityTest {
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(2);
         String addedAsin = albumTrackToAdd.getAsin();
-        int addedTracknumber = albumTrackToAdd.getTrackNumber();
+        int addedTrackNumber = albumTrackToAdd.getTrackNumber();
 
         when(playlistDao.getPlaylist(playlistId)).thenReturn(originalPlaylist);
         when(playlistDao.savePlaylist(originalPlaylist)).thenReturn(originalPlaylist);
-        when(albumTrackDao.getAlbumTrack(addedAsin, addedTracknumber))
+        when(albumTrackDao.getAlbumTrack(addedAsin, addedTrackNumber))
                 .thenReturn(albumTrackToAdd);
 
         AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
             .withId(playlistId)
             .withAsin(addedAsin)
-            .withTrackNumber(addedTracknumber)
+            .withTrackNumber(addedTrackNumber)
             .build();
 
         // WHEN
@@ -83,8 +83,16 @@ class AddSongToPlaylistActivityTest {
         when(playlistDao.getPlaylist(playlistId)).thenThrow(new PlaylistNotFoundException());
 
         // WHEN + THEN
+
         assertThrows(PlaylistNotFoundException.class,
                 () -> addSongToPlaylistActivity.handleRequest(request, null));
+//
+//        PlaylistNotFoundException exception = assertThrows(PlaylistNotFoundException.class,
+//                () -> addSongToPlaylistActivity.handleRequest(request, null));
+//
+//        assertThrows(PlaylistNotFoundException.class,
+//                () -> addSongToPlaylistActivity.handleRequest(request, null),
+//                exception.getMessage());
     }
 
     @Test
@@ -120,17 +128,17 @@ class AddSongToPlaylistActivityTest {
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(8);
         String addedAsin = albumTrackToAdd.getAsin();
-        int addedTracknumber = albumTrackToAdd.getTrackNumber();
+        int addedTrackNumber = albumTrackToAdd.getTrackNumber();
 
         when(playlistDao.getPlaylist(playlistId)).thenReturn(originalPlaylist);
         when(playlistDao.savePlaylist(originalPlaylist)).thenReturn(originalPlaylist);
-        when(albumTrackDao.getAlbumTrack(addedAsin, addedTracknumber))
+        when(albumTrackDao.getAlbumTrack(addedAsin, addedTrackNumber))
                 .thenReturn(albumTrackToAdd);
 
         AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
                                                .withId(playlistId)
                                                .withAsin(addedAsin)
-                                               .withTrackNumber(addedTracknumber)
+                                               .withTrackNumber(addedTrackNumber)
                                                .withQueueNext(false)
                                                .build();
 
@@ -156,17 +164,17 @@ class AddSongToPlaylistActivityTest {
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(6);
         String addedAsin = albumTrackToAdd.getAsin();
-        int addedTracknumber = albumTrackToAdd.getTrackNumber();
+        int addedTrackNumber = albumTrackToAdd.getTrackNumber();
 
         when(playlistDao.getPlaylist(playlistId)).thenReturn(originalPlaylist);
         when(playlistDao.savePlaylist(originalPlaylist)).thenReturn(originalPlaylist);
-        when(albumTrackDao.getAlbumTrack(addedAsin, addedTracknumber))
+        when(albumTrackDao.getAlbumTrack(addedAsin, addedTrackNumber))
                 .thenReturn(albumTrackToAdd);
 
         AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
                                                .withId(playlistId)
                                                .withAsin(addedAsin)
-                                               .withTrackNumber(addedTracknumber)
+                                               .withTrackNumber(addedTrackNumber)
                                                .withQueueNext(true)
                                                .build();
 

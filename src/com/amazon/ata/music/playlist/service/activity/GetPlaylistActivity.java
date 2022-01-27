@@ -50,6 +50,7 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
     public GetPlaylistResult handleRequest(final GetPlaylistRequest getPlaylistRequest, Context context) {
         log.info("Received GetPlaylistRequest {}", getPlaylistRequest);
         String playlistId = getPlaylistRequest.getId();
+
         Playlist playlist = playlistDao.getPlaylist(playlistId);
 
         if (!isValidString(playlistId)) {
@@ -60,4 +61,6 @@ public class GetPlaylistActivity implements RequestHandler<GetPlaylistRequest, G
                 .withPlaylist(new ModelConverter().toPlaylistModel(playlist))
                 .build();
     }
+
 }
+

@@ -25,6 +25,7 @@ public enum SongOrder {
      */
     SHUFFLED;
 
+
     /**
      * Gets ordered collections.
      *

@@ -14,7 +14,7 @@ public class CreatePlaylistResult {
      * @param builder the builder
      */
     public CreatePlaylistResult(Builder builder) {
-        this.playlist = builder.builderPlaylist;
+        this.playlist = builder.playlist;
     }
 
     /**
@@ -48,16 +48,16 @@ public class CreatePlaylistResult {
      * The type Builder.
      */
     public static final class Builder {
-        private PlaylistModel builderPlaylist;
+        private PlaylistModel playlist;
 
         /**
-         * With builderPlaylist builder.
+         * With playlist builder.
          *
-         * @param builderPlaylist the builderPlaylist
+         * @param playlist the playlist
          * @return the builder
          */
-        public Builder withPlaylist(PlaylistModel builderPlaylist) {
-            this.builderPlaylist = builderPlaylist;
+        public Builder withPlaylist(PlaylistModel playlist) {
+            this.playlist = playlist;
             return this;
         }
 

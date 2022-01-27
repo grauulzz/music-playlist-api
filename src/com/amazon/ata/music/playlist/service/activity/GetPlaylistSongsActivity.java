@@ -62,6 +62,10 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
             return GetPlaylistSongsResult.builder().withSongList(songModels).build();
         }
 
+        if (songOrder != SongOrder.DEFAULT && songOrder != SongOrder.REVERSED && songOrder != SongOrder.SHUFFLED) {
+            throw new NullPointerException("Invalid song order: " + songOrder);
+        }
+
         return GetPlaylistSongsResult.builder()
                 .withSongList(new ArrayList<>(getOrderedCollections(songOrder,
                         songModels)))

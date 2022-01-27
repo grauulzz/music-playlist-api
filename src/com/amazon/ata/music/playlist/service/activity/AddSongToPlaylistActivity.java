@@ -79,6 +79,7 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
         songList.add(songModel);
 
         try {
+
             playlist.getSongList().forEach(track -> {
                 if (!track.equals(albumTrack)) {
                     songList.add(0, songModel);
