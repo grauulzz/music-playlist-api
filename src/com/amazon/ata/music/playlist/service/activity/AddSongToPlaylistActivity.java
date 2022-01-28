@@ -1,11 +1,13 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.AlbumTrackDao;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.AlbumTrackNotFoundException;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
+import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.models.SongModel;
 import com.amazon.ata.music.playlist.service.models.requests.AddSongToPlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.AddSongToPlaylistResult;
@@ -16,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -67,7 +70,8 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
 
         Playlist playlist = playlistDao.getPlaylist(playlistId);
         AlbumTrack albumTrack = albumTrackDao.getAlbumTrack(asin, trackNumber);
-        List<SongModel> songList = new ArrayList<>(playlist.getSongList().size());
+        List<AlbumTrack> songList = playlist.getSongList();
+        List<SongModel> songModelList = new ModelConverter().toSongModelList(songList);
 
         SongModel songModel = SongModel.builder()
                 .withTrackNumber(trackNumber)
@@ -76,15 +80,15 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
                 .withTitle(albumTrack.getSongTitle())
                 .build();
 
-        songList.add(songModel);
-
         try {
 
-            playlist.getSongList().forEach(track -> {
-                if (!track.equals(albumTrack)) {
-                    songList.add(0, songModel);
-                }
-            });
+            if (!addSongToPlaylistRequest.isQueueNext()) {
+                songModelList.add(songModel);
+            }
+
+            if (addSongToPlaylistRequest.isQueueNext()) {
+                songModelList.add(0, songModel);
+            }
 
             playlistDao.savePlaylist(playlist);
 
@@ -96,7 +100,7 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
         log.info("Returning AddSongToPlaylistResult {} ", songList);
 
         return AddSongToPlaylistResult.builder()
-                .withSongList(songList)
+                .withSongList(songModelList)
                 .build();
     }
 }
