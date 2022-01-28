@@ -26,3 +26,13 @@ Resources:
           KeyType: "RANGE"
       BillingMode: "PAY_PER_REQUEST"
       TableName: "album_tracks"
+
+  Type: AWS::Lambda::Function
+    Properties:
+      Architectures: "x86_64"
+      Code:
+        ZipFile : "build/distributions/UnitProject.zip"
+      CodeSigningConfigArn: "arn:aws:lambda:us-east-2:420509969810:function:GetPlaylistActivityProvider"
+      FunctionName: "lambdaGetTest"
+      Handler: "com.amazon.ata.music.playlist.service.lambda.GetPlaylistActivityProvider::handleRequest"
+      Runtime: "Java 11 (Corretto)"
