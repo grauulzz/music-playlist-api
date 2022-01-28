@@ -76,7 +76,7 @@ class UpdatePlaylistActivityTest {
     @Test
     void handleRequest_playlistDoesNotExist_throwsPlaylistNotFoundException() {
         // GIVEN
-        String id = "id";
+        String id = "fadsfda";
         UpdatePlaylistRequest request = UpdatePlaylistRequest.builder()
                                             .withId(id)
                                             .withName("name")

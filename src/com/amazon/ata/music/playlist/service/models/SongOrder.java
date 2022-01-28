@@ -37,15 +37,18 @@ public enum SongOrder {
 
         switch (order) {
             case DEFAULT:
-                return songs.stream().sorted(Comparator.comparingInt(SongModel::getTrackNumber))
+                return songs.stream().sorted(Comparator
+                                .comparingInt(SongModel::getTrackNumber))
                         .collect(Collectors.toList());
 
             case REVERSED:
-                return songs.stream().sorted(Comparator.comparingInt(SongModel::getTrackNumber)
+                return songs.stream().sorted(Comparator
+                        .comparingInt(SongModel::getTrackNumber)
                         .reversed()).collect(Collectors.toList());
 
             case SHUFFLED:
-                return songs.stream().sorted(Comparator.comparingInt(SongModel::getTrackNumber))
+                return songs.stream().sorted(Comparator
+                                .comparingInt(SongModel::getTrackNumber))
                         .unordered()
                         .collect(Collectors.toList());
 
