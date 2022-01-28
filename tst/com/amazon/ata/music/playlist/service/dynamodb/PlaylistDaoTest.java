@@ -118,4 +118,21 @@ class PlaylistDaoTest {
         assertEquals("new name", updatedPlaylist.getName());
     }
 
+    @Test
+    void dbMapper_create_returnsNewPlaylist() {
+        Playlist newPlaylist = new Playlist();
+        newPlaylist.setId("PPT03");
+        newPlaylist.setName("PPT03 playlist");
+        newPlaylist.setCustomerId("1");
+        newPlaylist.setSongCount(0);
+        newPlaylist.setTags(null);
+        dbMapper.save(newPlaylist);
+        Playlist playlistFromDb = dbMapper.load(Playlist.class, newPlaylist.getId());
+        assertEquals(newPlaylist.getId(), playlistFromDb.getId());
+        assertEquals(newPlaylist.getName(), playlistFromDb.getName());
+        assertEquals(newPlaylist.getCustomerId(), playlistFromDb.getCustomerId());
+        assertEquals(newPlaylist.getTags(), playlistFromDb.getTags());
+        assertEquals(newPlaylist.getSongCount(), playlistFromDb.getSongCount());
+    }
+
 }

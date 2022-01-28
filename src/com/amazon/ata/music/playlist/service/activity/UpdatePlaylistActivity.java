@@ -14,6 +14,8 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import javax.inject.Inject;
 
@@ -68,19 +70,28 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
                 isValidString(requestedCustomerId);
 
         try {
-            playlistDao.savePlaylist(playlist);
 
             if (!validated) {
                 throw new InvalidAttributeValueException("Invalid characters entry in playlist name or customer ID");
             }
 
-            if (Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
-                playlist.setCustomerId(requestedCustomerId);
-                playlist.setName(requestedName);
-
-            } else {
+            if (!Objects.equals(playlist.getCustomerId(), requestedCustomerId)) {
                 throw new InvalidAttributeChangeException("Cannot change customer ID");
             }
+
+            playlist.setCustomerId(requestedCustomerId);
+            playlist.setName(requestedName);
+
+            if (playlist.getSongCount() == null) {
+                playlist.setSongCount(0);
+            }
+
+            if (playlist.getSongList() == null) {
+                playlist.setSongList(Collections.emptyList());
+            }
+
+            playlistDao.savePlaylist(playlist);
+
 
         } catch (InvalidAttributeChangeException | InvalidAttributeValueException e) {
             log.error(e.getMessage());
@@ -89,8 +100,7 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
 
         return UpdatePlaylistResult
                 .builder()
-                .withPlaylist(new ModelConverter()
-                        .toPlaylistModel(playlist))
+                .withPlaylist(new ModelConverter().toPlaylistModel(playlist))
                 .build();
 
     }

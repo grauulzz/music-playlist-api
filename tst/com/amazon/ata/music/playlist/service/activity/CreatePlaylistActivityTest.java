@@ -43,6 +43,7 @@ class CreatePlaylistActivityTest {
 
 
         // WHEN
+        when(playlistDao.savePlaylist(playlist)).thenReturn(playlist);
         cpa.handleRequest(request, null);
         when(playlistDao.getPlaylist(playlist.getId())).thenReturn(playlist);
 

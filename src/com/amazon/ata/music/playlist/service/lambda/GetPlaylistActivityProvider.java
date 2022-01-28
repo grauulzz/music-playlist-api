@@ -30,9 +30,7 @@ public class GetPlaylistActivityProvider implements RequestHandler<GetPlaylistRe
     @Override
     public GetPlaylistResult handleRequest(final GetPlaylistRequest getPlaylistRequest,
                                            Context context) {
-        return DaggerServiceComponent.create()
-                .provideGetPlaylistActivity()
-                .handleRequest(getPlaylistRequest, context);
+        return sc.provideGetPlaylistActivity().handleRequest(getPlaylistRequest, context);
     }
 
 }
