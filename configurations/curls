@@ -1,0 +1,32 @@
+
+
+// GetPlaylistActivityProvider (GET /prod/playlist/:id)
+curl -X "GET" "https://f9bmz3bhn5.execute-api.us-east-2.amazonaws.com/prod/playlists/{id}" -H 'Content-Type: application/json' -d '{"id": "id"}'
+{
+    "playlist":{"id":"id","name":"a playlist","customerId":"CustomerABC","songCount":1,"tags":["tag"]}
+}
+
+// CreatePlaylistActivityProvider (POST /prod/playlist)
+curl -X "POST" "https://f9bmz3bhn5.execute-api.us-east-2.amazonaws.com/prod/playlists" -H 'Content-Type: application/json' -d '{"name": "new-playlist", "customerId": "1", "tags" : ["tag1", "tag2"]}'
+{
+    "playlist":{"id":"86v33","name":"new-playlist","customerId":"1","songCount":0,"tags":["tag1","tag2"]}
+}
+
+
+// UpdatePlaylistActivityProvider (PUT /prod/playlist/:id)
+curl -X "PUT" "https://f9bmz3bhn5.execute-api.us-east-2.amazonaws.com/prod/playlists/{id}" -H 'Content-Type: application/json' -d '{"id": "id", "name": "updated-playlist", "customerId": "CustomerABC"}'
+{
+    "playlist":{"id":"id","name":"updated-playlist","customerId":"CustomerABC","songCount":1,"tags":["tag"]}
+}
+
+// AddSongToPlaylistActivityProvider (POST /prod/playlist/:id/song)
+curl -X "POST" "https://f9bmz3bhn5.execute-api.us-east-2.amazonaws.com/prod/playlists/{id}/songs" -H 'Content-Type: application/json' -d '{"id": "id", "name": "song-name", "asin": "B019HKJTCI", "trackNumber": 6, "queueNext": false}'
+{
+    "songList":[{"asin":"asin0","album":"album0","trackNumber":0,"title":"title0"},{"asin":"B019HKJTCI","album":"Money","trackNumber":6,"title":"Dark Side of the Moon"}]
+}
+
+// GetPlaylistSongsActivityProvider (GET /prod/playlist/:id/songs)
+curl -X "GET" "https://f9bmz3bhn5.execute-api.us-east-2.amazonaws.com/prod/playlists/{id}/songs" -H 'Content-Type: application/json' -d '{"id": "id", "order": "DEFAULT"}'
+{
+    "songList":[{"asin":"asin0","album":"album0","trackNumber":0,"title":"title0"},{"asin":"B019HKJTCI","album":"Money","trackNumber":6,"title":"Dark Side of the Moon"}]
+}
